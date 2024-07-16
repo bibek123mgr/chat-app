@@ -162,6 +162,7 @@ const userController = {
             email: user.email,
             imageurl: user.imageurl,
             createdAt: user.createdAt,
+            role: user.role,
             friends,
             groups
         }

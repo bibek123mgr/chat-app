@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { registerUser } from '../../../store/authSlice';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser, reSetStatus } from '../../../store/authSlice';
+import { STATUSES } from '../../../global/http/Type';
 
 const Register = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
+    const { status } = useSelector((store) => store.auth)
     const [data, setData] = useState({
         name: '',
         email: '',
@@ -28,6 +31,13 @@ const Register = () => {
             [name]: value
         })
     }
+
+    useEffect(() => {
+        if (status === STATUSES.SUCCESS) {
+            dispatch(reSetStatus())
+            navigate('/chat');
+        }
+    }, [status]);
 
     const inputFields = [
         {

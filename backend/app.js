@@ -15,7 +15,9 @@ connection();
 const corsOptions = {
   origin: 'http://localhost:5173',
   credentials: true,
+  methods: ["POST", "GET", "PATCH", "DELETE"]
 };
+
 
 app.use(cors(corsOptions));
 

@@ -2,38 +2,41 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { deleteMe, logout } from '../../../store/authSlice';
 
-const DeleteMe = ({ toggle }) => {
-    const dispatch = useDispatch()
+const DeleteMe = ({ toggle, handleLogout }) => {
+
+    const dispatch = useDispatch();
     const [password, setPassword] = useState('');
-    const [show, setShow] = useState(false)
-    const fromRef = useRef()
+    const [show, setShow] = useState(false);
+    const formRef = useRef();
 
     const handleShowPassword = () => {
-        setShow(!show)
-    }
-
-    const handleDeleteMe = (e) => {
-        e.preventDefault()
-        dispatch(deleteMe(password))
-        dispatch(logout())
+        setShow(!show);
     };
 
-    const handlickOutSide = (e) => {
-        if (fromRef.current && !fromRef.current.contains(e.target)) {
-            toggle()
+    const handleDeleteMe = (e) => {
+        e.preventDefault();
+        dispatch(deleteMe(password));
+        dispatch(logout());
+        handleLogout();
+        window.location.href = '/';
+    };
+
+    const handleClickOutside = (e) => {
+        if (formRef.current && !formRef.current.contains(e.target)) {
+            toggle();
         }
-    }
+    };
+
     useEffect(() => {
-        document.addEventListener('mousedown',
-            handlickOutSide)
+        document.addEventListener('mousedown', handleClickOutside);
         return () => {
-            document.addEventListener('mousedown', handlickOutSide)
-        }
-    }, [])
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-10">
-            <form ref={fromRef} className="w-full max-w-sm p-4 bg-white shadow-md rounded-md" onSubmit={handleDeleteMe}>
+            <form ref={formRef} className="w-full max-w-sm p-4 bg-white shadow-md rounded-md" onSubmit={handleDeleteMe}>
                 <h2 className="text-xl font-bold text-center mb-2">Delete Account</h2>
                 <div className="flex border rounded-md px-1 mb-2">
                     <input

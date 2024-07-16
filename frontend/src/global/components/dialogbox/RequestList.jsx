@@ -10,7 +10,6 @@ const RequestList = () => {
         dispatch(getRequest());
     }, [dispatch]);
 
-    c
     const handleChangeRequestStatus = (status, id) => {
         const data = {
             requestId: id,

@@ -8,22 +8,16 @@ const Profile = ({ user }) => {
     const [update, setUpdate] = useState(false);
     const [updateProfile, setUpdateProfile] = useState(false);
 
-
     const handleTogglerDelete = () => {
         setDeleteP(!deleteP);
-    };
+    }
 
     const handleToggleUpdatePassword = () => {
         setUpdate(!update);
-
-
-    };
-
+    }
     const handleTogglerUpdate = () => {
         setUpdateProfile(!updateProfile);
-    };
-
-
+    }
     return (
         <>
             <section className="relative pt-36 pb-24 z-auto">
@@ -46,8 +40,8 @@ const Profile = ({ user }) => {
                 </div>
             </section>
             {update && <UpdatePassword togglepp={handleToggleUpdatePassword} />}
-            {deleteP && <DeleteMe toggle={handleTogglerDelete} />}
-            {updateProfile && <EditProfile togglepp={handleTogglerUpdate} />}
+            {deleteP && <DeleteMe toggle={handleTogglerDelete} handleLogout={onLogout} />}
+            {updateProfile && <EditProfile togglepp={handleTogglerUpdate} user={user} />}
 
         </>
     );

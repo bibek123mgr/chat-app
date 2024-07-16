@@ -33,8 +33,8 @@ const Login = () => {
 
     useEffect(() => {
         if (status === STATUSES.SUCCESS) {
-            navigate('/chat');
             dispatch(reSetStatus())
+            navigate('/chat');
         }
     }, [status]);
 

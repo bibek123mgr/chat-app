@@ -1,7 +1,6 @@
+const Chat = require('../../models/chatModel.js');
 const User = require('../../models/userModel.js');
 const AppError = require('../../services/AppError.js');
-const handleGlobalError = require('../../services/handleGlobalError.js');
-const { newUserValidater, validateHandler } = require('../../utils/validator.js');
 
 // Register a new user
 const authController = {
@@ -12,19 +11,23 @@ const authController = {
             return next(new AppError(401, 'User already exists'));
         }
         const user = await User.create({ name, email, password });
+        const [friends, groups] = await Promise.all([
+           Chat.countDocuments({ members: { $in: [user._id] }, isGroupChat: false }),
+           Chat.countDocuments({ members: { $in: [user._id] }, isGroupChat: true })
+        ])
         const options = {
         expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-        httpOnly: false,
-        secure: false, 
         };
+        const token = user.generateToken();
         const data = {
             _id: user._id,
             name: user.name,
             email: user.email,
             imageurl: user.imageurl,
-            role: user.role
+            role: user.role,
+            friends,
+            groups
         };
-        const token = user.generateToken();
         res.status(201).cookie("token", token, options).json({
             message: 'Successfully register',
             data
@@ -41,18 +44,23 @@ const authController = {
         if (!isMatch) {
             return next(new AppError(404, 'Invalid credentials'));
         }
+        const [friends, groups] = await Promise.all([
+           Chata.countDocuments({ members: { $in: [user._id] }, isGroupChat: false }),
+           Chat.countDocuments({ members: { $in: [user._id] }, isGroupChat: true })
+        ])
+        const options = {
+        expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+        };
+        const token = user.generateToken();
         const data = {
             _id: user._id,
             name: user.name,
             email: user.email,
             imageurl: user.imageurl,
-            role: user.role
+            role: user.role,
+            friends,
+            groups
         };
-
-        const options = {
-        expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-        };
-        const token = user.generateToken();
         res.status(200).cookie("token", token,options).json({
             message: 'Successfully logged in',
             data,

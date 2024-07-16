@@ -5,27 +5,29 @@ import { Link } from 'react-router-dom';
 import Users from '../dialogbox/Users';
 import RequestList from '../dialogbox/RequestList';
 
-const Navbar = ({ user, login, setLogin }) => {
-    const dispatch = useDispatch()
-    const handleLogOut = () => {
-        dispatch(logoutUser())
-        setLogin(false)
-    }
-    const [show, setShow] = useState(false)
-    const handleToggle = () => {
-        setShow((prev) => !prev)
-        if (showRequest) {
-            setShowRequest(false)
-        }
-    }
+const Navbar = ({ user, login }) => {
+    const dispatch = useDispatch();
 
-    const [showRequest, setShowRequest] = useState(false)
-    const handleToggleRequest = () => {
-        setShowRequest((prev) => !prev)
-        if (show) {
-            setShow(false)
+    const handleLogOut = () => {
+        dispatch(logoutUser());
+    };
+
+    const [show, setShow] = useState(false);
+    const handleToggle = () => {
+        setShow((prev) => !prev);
+        if (showRequest) {
+            setShowRequest(false);
         }
-    }
+    };
+
+    const [showRequest, setShowRequest] = useState(false);
+    const handleToggleRequest = () => {
+        setShowRequest((prev) => !prev);
+        if (show) {
+            setShow(false);
+        }
+    };
+
     return (
         <>
             <div className='bg-white min-h-14 shadow-sm flex items-center justify-center'>
@@ -34,11 +36,12 @@ const Navbar = ({ user, login, setLogin }) => {
                         <Link to={!login ? '/' : '/chat/profile'} className='text-blue-600 font-bold'>Chat App</Link>
                     </div>
                     <div className='flex items-center gap-3'>
-                        {login && <>
-                            <button onClick={handleToggle}><i className="fa-solid fa-user-plus"></i></button>
-                            <button onClick={handleToggleRequest}><i className="fa-solid fa-user-group"></i></button>
-                        </>
-                        }
+                        {login && (
+                            <>
+                                <button onClick={handleToggle}><i className="fa-solid fa-user-plus"></i></button>
+                                <button onClick={handleToggleRequest}><i className="fa-solid fa-user-group"></i></button>
+                            </>
+                        )}
                         <div className='flex gap-3 items-center'>
                             {!login ? (
                                 <>
@@ -67,6 +70,6 @@ const Navbar = ({ user, login, setLogin }) => {
             {showRequest && <RequestList />}
         </>
     );
-}
+};
 
 export default Navbar;

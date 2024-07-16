@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { editProfile } from '../../../store/authSlice';
 
-const EditProfile = ({ togglepp }) => {
+const EditProfile = ({ togglepp, user }) => {
     const dispatch = useDispatch();
     const [data, setData] = useState({
-        name: '',
-        email: '',
+        name: user.name,
+        email: user.email,
     });
     const formRef = useRef();
 
     const handleUpdateProfile = (e) => {
         e.preventDefault();
-        console.log(data);
-        // togglepp();
+        dispatch(editProfile(data));
+        togglepp();
     };
 
     const handleChange = (e) => {
@@ -48,8 +49,7 @@ const EditProfile = ({ togglepp }) => {
                         value={data.name}
                         name="name"
                         onChange={handleChange}
-                        className="w-full px-3 py-2 mt-1 text-sm border-none outline:none focus:outline-none text-black"
-                        disabled={false}
+                        className="w-full px-3 py-2 mt-1 text-sm border-none outline-none focus:outline-none text-black"
                     />
                 </div>
                 <div className="flex border rounded-md px-1 mb-2">
@@ -60,8 +60,7 @@ const EditProfile = ({ togglepp }) => {
                         value={data.email}
                         name="email"
                         onChange={handleChange}
-                        className="w-full px-3 py-2 mt-1 text-sm border-none outline:none focus:outline-none text-black"
-                        disabled={false}
+                        className="w-full px-3 py-2 mt-1 text-sm border-none outline-none focus:outline-none text-black"
                     />
                 </div>
                 <div className="flex justify-center space-x-4">
@@ -69,14 +68,12 @@ const EditProfile = ({ togglepp }) => {
                         type="button"
                         onClick={togglepp}
                         className="inline-block px-4 py-2 text-sm font-medium text-blue-600 border border-blue-600 rounded-md hover:bg-blue-600 hover:text-white"
-                        disabled={false}
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         className="inline-block px-4 py-2 text-sm font-medium text-white bg-red-600 border border-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-200"
-                        disabled={false}
                     >
                         Update
                     </button>

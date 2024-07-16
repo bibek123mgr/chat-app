@@ -4,31 +4,32 @@ import { updateMyPassword } from '../../../store/authSlice';
 
 const UpdatePassword = ({ togglepp }) => {
     const dispatch = useDispatch();
-    const fromRef = useRef()
+    const formRef = useRef();
     const [show, setShow] = useState(false);
     const [data, setData] = useState({
-        oldPassword: '',
+        password: '',
         newPassword: '',
     });
 
     const handleUpdatePassword = (e) => {
-        e.preventDefault()
-        console.log(data);
-        dispatch(updateMyPassword(data)); // Uncomment this when ready to dispatch
+        e.preventDefault();
+        dispatch(updateMyPassword(data));
+        togglepp();
+
     };
+
     const handleClickOutside = (e) => {
-        if (fromRef.current && !fromRef.current.contains(e.targe)) {
-            togglepp()
+        if (formRef.current && !formRef.current.contains(e.target)) {
+            togglepp();
         }
-    }
+    };
 
     useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside)
+        document.addEventListener('mousedown', handleClickOutside);
         return () => {
-            document.addEventListener('mousedown', handleClickOutside)
-
-        }
-    }, [])
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -44,20 +45,20 @@ const UpdatePassword = ({ togglepp }) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-10">
-            <form ref={fromRef} className="w-full max-w-sm p-4 bg-white shadow-md rounded-md" onSubmit={handleUpdatePassword}>
+            <form ref={formRef} className="w-full max-w-sm p-4 bg-white shadow-md rounded-md" onSubmit={handleUpdatePassword}>
                 <h2 className="text-xl font-bold text-center mb-2">Update Password</h2>
                 <div className="flex border rounded-md px-1 mb-2">
                     <input
                         id="oldPassword"
                         type={show ? 'text' : 'password'}
                         placeholder="Enter your old password"
-                        value={data.oldPassword}
-                        name='oldPassword'
+                        value={data.password}
+                        name='password'
                         onChange={handleChange}
-                        className="w-full px-3 py-2 mt-1 text-sm border-none outline:none focus:outline-none text-black"
+                        className="w-full px-3 py-2 mt-1 text-sm border-none outline-none focus:outline-none text-black"
                         disabled={false}
                     />
-                    <button onClick={handleShowPassword} type='button'>
+                    <button onClick={handleShowPassword} type="button">
                         {!show ? <i className="fa-regular fa-eye"></i> : <i className="fa-regular fa-eye-slash"></i>}
                     </button>
                 </div>
@@ -69,15 +70,16 @@ const UpdatePassword = ({ togglepp }) => {
                         value={data.newPassword}
                         name='newPassword'
                         onChange={handleChange}
-                        className="w-full px-3 py-2 mt-1 text-sm border-none outline:none focus:outline-none text-black"
+                        className="w-full px-3 py-2 mt-1 text-sm border-none outline-none focus:outline-none text-black"
                         disabled={false}
                     />
-                    <button onClick={handleShowPassword} type='button'>
+                    <button onClick={handleShowPassword} type="button">
                         {!show ? <i className="fa-regular fa-eye"></i> : <i className="fa-regular fa-eye-slash"></i>}
                     </button>
                 </div>
                 <div className="flex justify-center space-x-4">
                     <button
+                        type="button"
                         onClick={togglepp}
                         className="inline-block px-4 py-2 text-sm font-medium text-blue-600 border border-blue-600 rounded-md hover:bg-blue-600 hover:text-white"
                         disabled={false}
