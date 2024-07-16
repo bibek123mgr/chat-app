@@ -1,31 +1,33 @@
 const { WEBSITE_URL } = require("../../config/config")
+const { getMembers } = require("../../lib/helper")
 const Chat = require("../../models/chatModel")
 const Message = require("../../models/messageModel")
 const AppError = require("../../services/AppError")
 const fs=require('fs').promises
 
 const messageController={
-    sendMessage: async(req, res, next)=>{
-        const { content } = req.body
-        const {id} = req.params   
-        if (!content && !req.file) {
-            return next(new AppError(400,'content or file require'))
-        }
-        let fileName;
-        if (req.file) {
-            fileName=WEBSITE_URL+req.file.filename
-        }
-        await Message.create({
+    sendMessage: async (content, id, sender) => {
+    try {
+        let message = await Message.create({
             content,
-            attachment: fileName,
             chat: id,
-            sender:req.user
-        })
+            sender
+        });
+        message = await Message.findById(message._id).populate("sender", "name imageurl");
+        const data = {
+            _id: message._id,
+            sender: message.sender,
+            chat: message.chat,
+            content: message.content,
+            createdAt: message.createdAt
+        };
 
-        res.status(201).json({
-            message:'successfully send message'
-        })
-    },
+        return data
+    } catch (err) {
+        console.error("Error sending message:", err);
+        throw new Error("Failed to send message");
+    }
+},
     getMessages: async (req, res, next) => {
         const {id}=req.params
         const { page = 1 } = req.query

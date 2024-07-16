@@ -23,7 +23,7 @@ const Users = () => {
     };
     const add = true;
     return (
-        <div className='w-96 fixed bg-white left-1/2 transform -translate-x-1/2 p-4 mt-11 shadow-md rounded-lg h-auto'>
+        <div className='w-96 fixed bg-white left-1/2 transform -translate-x-1/2 p-4 mt-11 shadow-md rounded-lg h-auto z-50'>
             <Search onChange={handleSearchChange} onSubmit={handleSearchSubmit} />
             <div className='mt-4 overflow-y-auto max-h-[calc(100vh-30vh)] no-scrollbar'>
                 {users && users.map((user) => (

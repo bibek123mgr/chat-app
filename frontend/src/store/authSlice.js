@@ -98,3 +98,45 @@ export function logoutUser() {
         }
     }
 }
+
+export function editProfile(data) {
+    return async function editProfileThunk(dispatch) {
+        dispatch(setStatus(STATUSES.LOADING));
+        try {
+            const response = await API.patch('api/v1/profile', data);
+            dispatch(setStatus(STATUSES.SUCCESS));
+            toast.success(response.data.message);
+        } catch (error) {
+            dispatch(setStatus(STATUSES.ERROR));
+            toast.error(error.response.data.message);
+        }
+    }  
+}
+
+export function deleteMe(data) {
+    return async function editProfileThunk(dispatch) {
+        dispatch(setStatus(STATUSES.LOADING));
+        try {
+            const response = await API.delete('api/v1/profile', { password: data });
+            dispatch(setStatus(STATUSES.SUCCESS));
+            toast.success(response.data.message);
+        } catch (error) {
+            dispatch(setStatus(STATUSES.ERROR));
+            toast.error(error.response.data.message);
+        }
+    }  
+}
+
+export function updateMyPassword(data) {
+    return async function editProfileThunk(dispatch) {
+        dispatch(setStatus(STATUSES.LOADING));
+        try {
+            const response = await API.post('api/v1/profile', data);
+            dispatch(setStatus(STATUSES.SUCCESS));
+            toast.success(response.data.message);
+        } catch (error) {
+            dispatch(setStatus(STATUSES.ERROR));
+            toast.error(error.response.data.message);
+        }
+    }  
+}

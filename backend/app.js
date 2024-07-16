@@ -6,7 +6,7 @@ const authMiddleware = require('./middleware/authMiddleware.js');
 const { PORT } = require('./config/config.js');
 const { Server } = require('socket.io');
 const app = express();
-const Port = PORT || 3000;
+const port = PORT || 3000;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -19,22 +19,23 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-//routes import
+// Routes import
 const authRoute = require('./routes/auth/authRoute.js');
 const profileRoute = require('./routes/user/userRoute.js');
 const groupRoute = require('./routes/user/groupRoute.js');
 const requestRoute = require('./routes/user/requestRoute.js');
-const messageController = require('./routes/user/messageRoute.js');
+const messageRoute = require('./routes/user/messageRoute.js');
+const { getMembers } = require('./lib/helper.js');
+const messageController = require('./controllers/user/messageController.js');
 
 app.use('/api/v1/auth', authRoute);
-app.use('/api/v1', profileRoute, groupRoute, requestRoute, messageController);
+app.use('/api/v1', profileRoute, groupRoute, requestRoute, messageRoute);
 
-const server = app.listen(Port, () => {
-  console.log('I am listening on port', Port);
+const server = app.listen(port, () => {
+  console.log('I am listening on port', port);
 });
 
 const userSocketIDs = new Map();
-const onlineUsers = new Set();
 
 const io = new Server(server, {
   cors: {
@@ -51,14 +52,30 @@ io.use((socket, next) => {
   });
 });
 
-io.on('connection', (socket) => {
-  const userId = socket.request.user.id; // Assuming `isAuthSocket` sets `user` in `socket.request`
+io.on('connection', (socket,next) => {
+  const userId = socket.request.user.id;
   userSocketIDs.set(userId, socket.id);
-  console.log(userSocketIDs);
-
   socket.on('NEW_USER', (data) => {
-    console.log(data);
+    console.log('New user data:', data);
     socket.emit('NEW_USER', { data });
+  });
+
+  socket.on('NEW_MESSAGE', async (data) => {
+    try {
+      const chatsData = await messageController.sendMessage(data.content, data.id, userId)
+      console.log(chatsData)
+      const members = await getMembers(data.id);
+        const flatMembers = members.flat();
+        for (const memberId of flatMembers) {
+          const stringId=memberId.toString()
+          const socketId = userSocketIDs.get(stringId);
+          if (socketId) {
+            io.to(socketId).emit('NEW_MESSAGE',chatsData);
+          } 
+        }
+    } catch (error) {
+      console.error('Error fetching members:', error);
+    }
   });
 
   socket.on('disconnect', () => {

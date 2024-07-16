@@ -10,7 +10,7 @@ const RequestList = () => {
         dispatch(getRequest());
     }, [dispatch]);
 
-
+    c
     const handleChangeRequestStatus = (status, id) => {
         const data = {
             requestId: id,
@@ -19,7 +19,7 @@ const RequestList = () => {
         dispatch(responseRequest(data))
     }
     return (
-        <div className='w-96 fixed bg-white left-1/2 transform -translate-x-1/2 p-4 mt-11 shadow-md rounded-lg h-auto'>
+        <div className='w-96 fixed bg-white left-1/2 transform -translate-x-1/2 p-4 mt-11 shadow-md rounded-lg h-auto z-50'>
             <h1 className='font-bold'>Request List</h1>
             <div className='mt-4 overflow-y-auto max-h-[calc(100vh-30vh)] no-scrollbar'>
                 {requests.length > 0 ? (

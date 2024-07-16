@@ -38,13 +38,11 @@ restrictTo : (...roles) => {
     if (!token) {
       return next(new AppError(401, 'Authentication token missing'));
     }
-
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         return next(new AppError(401, 'Invalid token'));
       }
-
-      socket.request.user = decoded; // Assuming the decoded token contains user info
+      socket.request.user = decoded;
       next();
     });
   } catch (err) {

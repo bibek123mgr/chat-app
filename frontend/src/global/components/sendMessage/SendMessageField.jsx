@@ -3,8 +3,10 @@ import File from '../dialogbox/File';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { postMessage } from '../../../store/messageSlice';
+import { getSocket } from '../../../Socket';
 
 const SendMessageField = () => {
+    const socket = getSocket()
     const dispatch = useDispatch()
     const { id } = useParams()
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -23,7 +25,12 @@ const SendMessageField = () => {
         event.preventDefault();
         const formData = new FormData();
         formData.append('content', content);
-        dispatch(postMessage(id, formData))
+        const data = {
+            content,
+            id
+        }
+        // dispatch(postMessage(id, formData))
+        socket.emit('NEW_MESSAGE', data)
         setContent('');
     };
 

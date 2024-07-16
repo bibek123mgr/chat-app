@@ -19,7 +19,7 @@ const Search = ({ onSubmit }) => {
                 className='w-full px-2 py-1 bg-transparent border-none outline-none'
             />
             <button type="submit" className='ml-2'>
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <i className="fa-solid fa-magnifying-glass"></i>
             </button>
         </form>
     );

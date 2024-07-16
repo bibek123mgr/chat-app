@@ -86,8 +86,7 @@ const groupController = {
     const chats = await Chat.find({ members: req.user });
     const transformChats = await Promise.all(chats.map(async chat => {
         const otherMemberId = getOtherMember(chat.members, req.user);
-        const otherMember = await User.findById(otherMemberId);
-
+        const otherMember = await User.findById(otherMemberId); 
         return {
             _id: chat._id,
             isGroupChat: chat.isGroupChat,
