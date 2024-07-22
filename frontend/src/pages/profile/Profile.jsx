@@ -40,7 +40,7 @@ const Profile = ({ user }) => {
                 </div>
             </section>
             {update && <UpdatePassword togglepp={handleToggleUpdatePassword} />}
-            {deleteP && <DeleteMe toggle={handleTogglerDelete} handleLogout={onLogout} />}
+            {deleteP && <DeleteMe toggle={handleTogglerDelete} />}
             {updateProfile && <EditProfile togglepp={handleTogglerUpdate} user={user} />}
 
         </>

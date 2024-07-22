@@ -11,19 +11,28 @@ const fs = require('fs').promises;
 
 const groupController = {
     createGroup: async (req, res, next) => {
+        console.log(req.body)
         const { name, members } = req.body
         if (!name || !members) {
             return next(new AppError(400, 'require name and member '))
         }
         const allMembers = [...members, req.user]
-        await Chat.create({
+        const group=await Chat.create({
             name,
             isGroupChat: true,
             creator: req.user,
             members: allMembers,
         })
+        const data = {
+            _id: group._id,
+            name:group.name,
+            isGroupChat: group.isGroupChat,
+            creator: req.user,
+            members: group.members,
+        }
         res.status(201).json({
-            message: 'group created'
+            message: 'group created',
+            data:data
         })
     },
     getMyGroups: async (req, res, next)=>{

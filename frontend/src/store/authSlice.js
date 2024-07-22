@@ -112,6 +112,7 @@ export function editProfile(data) {
             dispatch(setProfile(data))
             dispatch(setStatus(STATUSES.SUCCESS));
             toast.success(response.data.message);
+            window.location.href = '/'
         } catch (error) {
             dispatch(setStatus(STATUSES.ERROR));
             toast.error(error.response.data.message);
@@ -125,6 +126,7 @@ export function deleteMe(password) {
         try {
             const response = await API.delete('api/v1/profile',{data:{password}} );
             dispatch(setStatus(STATUSES.SUCCESS));
+            window.location.href = '/'
             toast.success(response.data.message);
         } catch (error) {
             dispatch(setStatus(STATUSES.ERROR));

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy, Suspense } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -25,7 +25,7 @@ function App() {
     if (status == STATUSES.SUCCESS) {
       dispatch(reSetStatus())
     }
-  }, [dispatch]);
+  }, []);
 
   return (
     <div style={{ height: '100vh' }}>

@@ -8,29 +8,23 @@ const AppError = require("../../services/AppError.js")
 const fs=require("fs")
 
 const userController = {
-    getMyFriends: async (req, res, next) => {
-    const { name = '', limit = 10, page = 1 } = req.query; 
-     const skip = (page - 1) * limit
-     const chats = await Chat.find({ members: { $in: [req.user] } }).exec();
-        const friends = chats.map(chat => getOtherMember(chat.members, req.user));
-        const query = {
-            _id: { $in: friends } 
-        };
-        if (name) {
-            query.name = { $regex: name, $options: 'i' };
-        }
-        const myFriends= await User.find(query)
-            .select('name imageurl')
-            .limit(Number(limit))
-            .skip(Number(skip))
-            .exec();
-        const totalPages = Math.ceil(myFriends.length / limit) || 0;
-        return res.status(200).json({
-         message:'fetch successfully',
-         data: myFriends,
-         totalPages
-     });
-    },
+getMyFriends: async (req, res, next) => {
+    const chats = await Chat.find({ members: { $in: [req.user] } }).exec();
+    const friends = chats.flatMap(chat => chat.members.filter(member => !member.equals(req.user)));
+
+    const friendIds = friends.map(friend => friend._id);
+    const query = { _id: { $in: friendIds } };
+
+    const myFriends = await User.find(query)
+        .select('name imageurl')
+        .exec();
+
+    return res.status(200).json({
+        message: 'Fetched successfully',
+        data: myFriends,
+    });
+}
+,
     findUser : async (req, res, next) => {
      const { name = '', limit = 10, page = 1 } = req.query; 
      const skip = (page - 1) * limit
@@ -146,7 +140,7 @@ const userController = {
     };
 
     res.status(200).cookie("token", null, options).json({
-        message: 'Successfully logged out'
+        message: 'Successfully account deleted'
     });
     },
     getMyProfile: async (req, res, next) => {

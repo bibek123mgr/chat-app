@@ -19,10 +19,13 @@ const userSlice = createSlice({
         setStatus(state, action) {
             state.data=action.payload
         },
+        setFriends(state, action) {
+            state.friends=action.payload
+        }
     }
 })
 
-export const { setUsers, setStatus } = userSlice.actions
+export const { setUsers, setStatus,setFriends } = userSlice.actions
 export default userSlice.reducer
 
 
@@ -40,16 +43,16 @@ export function fetchUsers(name) {
     }
 }
 
-// export function fetchUser(name) {
-//     return async function fetchUserThunk(dispatch) {
-//         dispatch(setStatus(STATUSES.LOADING))
-//         try {
-//             const response = await API.get(`api/v1/friends?name=${name}`)
-//             dispatch(setUsers(response.data.data))
-//             dispatch(setStatus(STATUSES.SUCCESS))
-//         } catch (error) {
-//             dispatch(setStatus(STATUSES.ERROR))
-  
-//         }
-//     }
-// }
+export function fetchMyfriends(name) {
+    return async function fetchMyfriendsThunk(dispatch) {
+        dispatch(setStatus(STATUSES.LOADING))
+        try {
+            const response = await API.get(`api/v1/friends?name=${name}`)
+            dispatch(setFriends(response.data.data))
+            dispatch(setStatus(STATUSES.SUCCESS))
+        } catch (error) {
+            dispatch(setStatus(STATUSES.ERROR))
+        }
+    }
+}
+

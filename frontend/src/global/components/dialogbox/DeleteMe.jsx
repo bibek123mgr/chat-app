@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { deleteMe, logout } from '../../../store/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteMe } from '../../../store/authSlice';
+import { STATUSES } from '../../http/Type';
 
-const DeleteMe = ({ toggle, handleLogout }) => {
-
+const DeleteMe = ({ toggle }) => {
+    const { status } = useSelector((store) => store.auth)
     const dispatch = useDispatch();
     const [password, setPassword] = useState('');
     const [show, setShow] = useState(false);
@@ -16,9 +17,6 @@ const DeleteMe = ({ toggle, handleLogout }) => {
     const handleDeleteMe = (e) => {
         e.preventDefault();
         dispatch(deleteMe(password));
-        dispatch(logout());
-        handleLogout();
-        window.location.href = '/';
     };
 
     const handleClickOutside = (e) => {

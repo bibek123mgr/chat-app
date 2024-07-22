@@ -30,18 +30,6 @@ const userController = {
        })
         
     },
-    // getUser: async (req, res, next) => {
-    //     const {id} = req.params;
-    //     const user = await User.findById(id).select("-password")
-    //         if (!user) {
-    //         return next(new AppError(404,'no userFound'))
-    //     }
-    //     res.status(200).json({
-    //         message: 'fetch',
-    //         data:user
-    //    })
-        
-    // },
     deleteUser: async (req, res, next) => {
         const {id} = req.params;
         const user = await User.findByIdAndDelete(id)

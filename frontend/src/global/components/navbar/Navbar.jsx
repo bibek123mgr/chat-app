@@ -28,6 +28,10 @@ const Navbar = ({ user, login }) => {
         }
     };
 
+    const handleToggleGroup = () => {
+
+    }
+
     return (
         <>
             <div className='bg-white min-h-14 shadow-sm flex items-center justify-center'>
@@ -40,6 +44,7 @@ const Navbar = ({ user, login }) => {
                             <>
                                 <button onClick={handleToggle}><i className="fa-solid fa-user-plus"></i></button>
                                 <button onClick={handleToggleRequest}><i className="fa-solid fa-user-group"></i></button>
+                                <button onClick={handleToggleGroup}><i class="fa-solid fa-people-roof"></i></button>
                             </>
                         )}
                         <div className='flex gap-3 items-center'>
